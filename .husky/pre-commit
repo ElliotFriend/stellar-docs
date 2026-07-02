@@ -1,5 +1,17 @@
 G='\033[0;32m'
 P='\033[0;35m'
+R='\033[0;31m'
 CLEAN='\033[0;0m'
 
 pnpm check:mdx || (echo -e "${G}Hint:${CLEAN} execute ${P}pnpm format:mdx${CLEAN} to format files" && exit 1)
+
+# Fast local check: no absolute internal /docs links in staged docs.
+# Scoped to staged files so pre-existing links in untouched files don't block
+# unrelated commits. CI enforces this repo-wide. CONTRIBUTING.md is excluded.
+staged_docs=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^docs/.*\.mdx?$' | grep -v 'CONTRIBUTING\.md$' || true)
+if [ -n "$staged_docs" ]; then
+  if echo "$staged_docs" | xargs grep -nH '](/docs' 2>/dev/null; then
+    echo -e "${R}Error:${CLEAN} absolute /docs link(s) found above. Use a relative ${P}../path/file.mdx${CLEAN} link with the .mdx extension instead."
+    exit 1
+  fi
+fi
