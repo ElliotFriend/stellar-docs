@@ -36,6 +36,8 @@ The Poseidon host functions expose the underlying _permutation primitives_, not 
 
 ### Poseidon host functions
 
+In the Rust `soroban-sdk`, these functions are exposed through the `CryptoHazmat` interface and require enabling the SDK's `hazmat-crypto` feature — they are not accessible with the default SDK features.
+
 - `poseidon_permutation` - performs the Poseidon permutation on an input vector of field elements
 - `poseidon2_permutation` - performs the Poseidon2 permutation on an input vector of field elements
 
