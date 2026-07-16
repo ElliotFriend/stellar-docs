@@ -22,6 +22,10 @@ jobs:
     steps:
       - name: Checkout App Repo
         uses: actions/checkout@v7
+        with:
+          # Full history so we can diff the PR against its base branch and only
+          # flag links introduced by this PR, not pre-existing repo content.
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -46,17 +50,14 @@ jobs:
         if: ${{ failure() }}
         run: pnpm diff:mdx && echo "::error::Prettier static analysis failed"
 
-      - name: No absolute internal /docs links
+      - name: No new absolute internal /docs links
+        # Canonical rule lives in scripts/check-relative-links.sh (shared with
+        # the pre-commit hook). Only flags absolute /docs links introduced by
+        # this PR's diff, not pre-existing content in untouched lines.
         run: |
-          # Internal doc links must be relative (../path/file.mdx), not absolute
-          # /docs/... routes. Relative links are validated at build time by
-          # onBrokenMarkdownLinks; absolute route links are not.
-          # CONTRIBUTING.md is excluded: it is not part of the docs build and
-          # its /docs link is an intentional illustrative example.
-          if grep -rn --include='*.md' --include='*.mdx' --exclude='CONTRIBUTING.md' '](/docs' docs/; then
-            echo "::error::Found absolute /docs link(s) above. Use a relative ../path/file.mdx link with the .mdx extension instead — see docs/platforms/anchor-platform/CONTRIBUTING.md."
-            exit 1
-          fi
+          base="${{ github.base_ref }}"
+          scripts/check-relative-links.sh --range "origin/${base:-main}...HEAD" \
+            || { echo "::error::New absolute /docs link(s) found above."; exit 1; }
 
 
 
