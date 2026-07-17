@@ -43,9 +43,9 @@ case "$mode" in
 esac
 
 # Walk the word-diff porcelain stream. For each new-file line, remember whether
-# any *added* token on it contains an absolute ']( /docs' link; report that
-# line if so. New-file line numbers are tracked from each hunk's @@ header,
-# advancing on every completed line except pure deletions (old-file-only).
+# any *added* token on it contains an absolute '](/docs' link; report that line
+# if so. New-file line numbers are tracked from each hunk's @@ header, advancing
+# on every completed line except pure deletions (old-file-only).
 findings=$(
   "${diff_cmd[@]}" | awk '
     function reset() { hasrem=0; haskept=0; flag=0 }
