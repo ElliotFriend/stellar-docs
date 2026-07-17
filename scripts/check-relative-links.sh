@@ -80,4 +80,5 @@ if [ -n "$findings" ]; then
   exit 1
 fi
 
+echo "All links check out"
 exit 0
