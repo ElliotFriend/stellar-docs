@@ -61,7 +61,6 @@ A husky pre-commit hook runs the prettier check; if it fails, run `pnpm format:m
 - **Internal links are relative file paths, including the `.mdx` extension**: `[fees](../../learn/fundamentals/fees-resource-limits-metering.mdx#inclusion-fee)`. Docusaurus resolves these at build time, so a broken path fails the build instead of shipping a 404.
 - Section index pages live at `parent/README.mdx` — if you're linking to a subsection's landing page, that's usually the file you want.
 - External links to other Stellar properties use `https://stellar.org/...` (no `www`).
-- SEP references use the canonical shortlinks (`https://stellar.org/protocol/sep-10`), not raw GitHub URLs.
 
 ### Page metadata
 
@@ -83,7 +82,7 @@ A husky pre-commit hook runs the prettier check; if it fails, run `pnpm format:m
 ### Terminology and style
 
 - "Stellar network" — lowercase *network*. Likewise *asset* and *anchor* are not capitalized.
-- Meeting notes (in `meeting-notes/`) use the date as the title (`2026-05-07`), uniformly across the series.
+- Meeting notes (in `meetings/`) use the date as the title (`2026-05-07`), uniformly across the series.
 
 ## Site Code and Infrastructure
 
